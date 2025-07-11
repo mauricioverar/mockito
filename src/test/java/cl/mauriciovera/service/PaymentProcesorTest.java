@@ -1,0 +1,112 @@
+package cl.mauriciovera.service;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import static org.mockito.ArgumentMatchers.any;
+//Mockito
+import static org.mockito.BDDMockito.*; // BDDMockito para usar given(...).willReturn(...)
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+//import cl.mauriciovera.interfaces.PaymentMethod;//
+import cl.mauriciovera.model.Payment;
+import cl.mauriciovera.model.PaymentHistory;
+import cl.mauriciovera.model.User;
+
+@ExtendWith(MockitoExtension.class) // Extender con MockitoExtension para usar Mockito
+public class PaymentProcesorTest {
+
+  @Mock
+  private PaymentMethod creditCardPayment; // no importar interface, solo el mock
+
+  @Mock
+  private PaymentMethod bankTransferPayment;
+
+  @Mock
+  private PaymentHistory paymentHistory;
+
+  @Captor
+  private ArgumentCaptor<Payment> paymentCaptor; // capturar el pago agregado ********
+
+  @InjectMocks
+  private PaymentProcessor paymentProcessor;
+
+  private User user;
+
+  @BeforeEach
+  public void setUp() {
+    user = new User("Pedro Perez"); // us de prueba
+    paymentProcessor = new PaymentProcessor(creditCardPayment, bankTransferPayment, paymentHistory);
+  }
+
+  @Test
+  public void testProcessPayment_CreditCardSuccess() {
+    given(creditCardPayment.process(100.0, user)).willReturn(true); // llamar a la data simulada
+    boolean result = paymentProcessor.processPayment(100, user, "CreditCard"); // metodo CreditCard
+    assertTrue(result); // verificar que el resultado sea verdadero
+
+    //verify(paymentHistory).add(paymentCaptor.capture()); // capturar y verificar el valor real del argumento
+
+    verify(creditCardPayment).process(100.0, user); // verificar que se haya llamado al mock con los parámetros correctos
+    verify(paymentHistory).add(any(Payment.class)); // verificar solo que se haya llamado el método
+  }
+
+  @Test
+  public void testProcessPayment_BankTransferSuccess() {
+    given(bankTransferPayment.process(200.0, user)).willReturn(true); // llamar a la data simulada
+    boolean result = paymentProcessor.processPayment(200, user, "BankTransfer"); // metodo BankTransfer
+    assertTrue(result); // verificar que el resultado sea verdadero
+
+    verify(bankTransferPayment).process(200.0, user); // verificar que se haya llamado al mock con los parámetros correctos
+    verify(paymentHistory).add(any(Payment.class)); // verificar solo que se haya llamado el método
+  }
+
+  /* @Test
+  public void testProcessPayment_InvalidAmount() {
+    try {
+      paymentProcessor.processPayment(0, user, "CreditCard"); // monto inválido
+    } catch (IllegalArgumentException e) {
+      assertTrue(e.getMessage().contains("Invalid amount or user")); // verificar mensaje de error
+    }
+  } */
+
+  // usar assertThrows mejor que try-catch
+  @Test
+  public void testProcessPayment_InvalidAmount() {
+    Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+      paymentProcessor.processPayment(0, user, "CreditCard"); // monto inválido
+    });
+
+    //assertTrue(exception.getMessage().contains("Invalid amount or user")); // contiene el mensaje de error
+    
+    assertEquals("Invalid amount or user", exception.getMessage()); // exactamente
+  }
+  
+  @Test
+  public void testProcessPayment_InvalidUser() {
+    Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+      paymentProcessor.processPayment(100, null, "CreditCard"); // usuario inválido
+    });
+
+    assertTrue(exception.getMessage().contains("Invalid amount or user")); // verificar mensaje de error
+  }
+
+  @Test
+  public void testProcessPayment_UnknownMethod() {
+    Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+      paymentProcessor.processPayment(100, user, "UnknownMethod"); // método desconocido
+    });
+
+    assertTrue(exception.getMessage().contains("Unknown payment method")); // verificar mensaje de error
+  }
+}

@@ -1,0 +1,7 @@
+cl\mauriciovera\service\BankTransferPayment.class
+cl\mauriciovera\service\CreditCardPayment.class
+cl\mauriciovera\model\PaymentHistory.class
+cl\mauriciovera\model\User.class
+cl\mauriciovera\service\PaymentMethod.class
+cl\mauriciovera\service\PaymentProcessor.class
+cl\mauriciovera\model\Payment.class
