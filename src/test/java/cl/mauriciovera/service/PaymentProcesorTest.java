@@ -79,12 +79,12 @@ public class PaymentProcesorTest {
     boolean result = paymentProcessor.processPayment(100, user, "CreditCard"); // metodo CreditCard
     assertTrue(result); // verificar que el resultado sea verdadero
 
-    // verify(paymentHistory).add(paymentCaptor.capture()); // capturar y verificar
-    // el valor real del argumento
 
     verify(creditCardPayment).process(100.0, user); // verificar que se haya llamado al mock con los parámetros
                                                     // correctos
-    verify(paymentHistory).add(any(Payment.class)); // verificar solo que se haya llamado el método
+    //verify(paymentHistory).add(any(Payment.class)); // verificar solo que se haya llamado el método
+    verify(paymentHistory).add(paymentCaptor.capture()); // capturar y verificar
+    // el valor real del argumento
   }
 
   @Test
@@ -119,7 +119,7 @@ public class PaymentProcesorTest {
                                                              // PaymentHistory
   }
 
-  
+
   @Test
   public void testGetPaymentHistory_ReturnsInjectedInstance() {
     PaymentHistory returnedHistory = paymentProcessor.getPaymentHistory();
