@@ -4,4 +4,4 @@ mockito,cl.mauriciovera.model,User,3,6,0,0,1,3,1,1,1,1
 mockito,cl.mauriciovera.model,Payment,12,15,0,0,4,6,4,1,4,1
 mockito,cl.mauriciovera.service,CreditCardPayment,7,0,0,0,3,0,3,0,3,0
 mockito,cl.mauriciovera.service,BankTransferPayment,7,0,0,0,3,0,3,0,3,0
-mockito,cl.mauriciovera.service,PaymentProcessor,3,64,1,9,1,15,2,6,1,2
+mockito,cl.mauriciovera.service,PaymentProcessor,3,64,0,10,1,15,1,7,1,2

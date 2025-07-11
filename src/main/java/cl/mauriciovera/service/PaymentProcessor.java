@@ -26,6 +26,7 @@ public class PaymentProcessor {
     // creditCardPayment.process(...)
     // y el valor retornado depende de la configuración del mock en el test
     // (given...willReturn...).
+
     if (amount <= 0 || user == null) {
       throw new IllegalArgumentException("Invalid amount or user");
     }
@@ -38,9 +39,11 @@ public class PaymentProcessor {
     } else {
       throw new IllegalArgumentException("Unknown payment method");
     }
+
     if (result) {
       paymentHistory.add(new Payment(amount, user, method, LocalDateTime.now()));
     }
+    
     return result;
   }
 

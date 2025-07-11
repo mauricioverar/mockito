@@ -26,26 +26,29 @@ public class PaymentProcessor {
     // creditCardPayment.process(...)
     // y el valor retornado depende de la configuración del mock en el test
     // (given...willReturn...).
-<span class="fc bfc" id="L29" title="All 4 branches covered.">    if (amount &lt;= 0 || user == null) {</span>
-<span class="fc" id="L30">      throw new IllegalArgumentException(&quot;Invalid amount or user&quot;);</span>
+
+<span class="fc bfc" id="L30" title="All 4 branches covered.">    if (amount &lt;= 0 || user == null) {</span>
+<span class="fc" id="L31">      throw new IllegalArgumentException(&quot;Invalid amount or user&quot;);</span>
     }
     
     boolean result;
-<span class="fc bfc" id="L34" title="All 2 branches covered.">    if (&quot;CreditCard&quot;.equalsIgnoreCase(method)) {</span>
-<span class="fc" id="L35">      result = creditCardPayment.process(amount, user); // Aquí se invoca el mock en los tests</span>
-<span class="fc bfc" id="L36" title="All 2 branches covered.">    } else if (&quot;BankTransfer&quot;.equalsIgnoreCase(method)) {</span>
-<span class="fc" id="L37">      result = bankTransferPayment.process(amount, user);</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">    if (&quot;CreditCard&quot;.equalsIgnoreCase(method)) {</span>
+<span class="fc" id="L36">      result = creditCardPayment.process(amount, user); // Aquí se invoca el mock en los tests</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">    } else if (&quot;BankTransfer&quot;.equalsIgnoreCase(method)) {</span>
+<span class="fc" id="L38">      result = bankTransferPayment.process(amount, user);</span>
     } else {
-<span class="fc" id="L39">      throw new IllegalArgumentException(&quot;Unknown payment method&quot;);</span>
+<span class="fc" id="L40">      throw new IllegalArgumentException(&quot;Unknown payment method&quot;);</span>
     }
-<span class="pc bpc" id="L41" title="1 of 2 branches missed.">    if (result) {</span>
-<span class="fc" id="L42">      paymentHistory.add(new Payment(amount, user, method, LocalDateTime.now()));</span>
+
+<span class="fc bfc" id="L43" title="All 2 branches covered.">    if (result) {</span>
+<span class="fc" id="L44">      paymentHistory.add(new Payment(amount, user, method, LocalDateTime.now()));</span>
     }
-<span class="fc" id="L44">    return result;</span>
+    
+<span class="fc" id="L47">    return result;</span>
   }
 
   public PaymentHistory getPaymentHistory() {
-<span class="nc" id="L48">    return paymentHistory;</span>
+<span class="nc" id="L51">    return paymentHistory;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

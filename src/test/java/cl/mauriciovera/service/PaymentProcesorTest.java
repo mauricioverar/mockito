@@ -50,6 +50,28 @@ public class PaymentProcesorTest {
   }
 
   @Test
+  public void testProcessPayment_InvalidAmount() {
+    Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+      paymentProcessor.processPayment(0, user, "CreditCard"); // monto inválido
+    });
+
+    // assertTrue(exception.getMessage().contains("Invalid amount or user")); //
+    // contiene el mensaje de error
+
+    assertEquals("Invalid amount or user", exception.getMessage()); // exactamente
+  }
+
+  @Test
+  public void testProcessPayment_InvalidUser() {
+    Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+      paymentProcessor.processPayment(100, null, "CreditCard"); // usuario inválido
+    });
+
+    assertTrue(exception.getMessage().contains("Invalid amount or user")); // verificar mensaje de error
+  }
+
+
+  @Test
   public void testProcessPayment_CreditCardSuccess() {
     given(creditCardPayment.process(100.0, user)).willReturn(true); // llamar a la data simulada
     boolean result = paymentProcessor.processPayment(100, user, "CreditCard"); // metodo CreditCard
@@ -71,36 +93,6 @@ public class PaymentProcesorTest {
     verify(paymentHistory).add(any(Payment.class)); // verificar solo que se haya llamado el método
   }
 
-  /* @Test
-  public void testProcessPayment_InvalidAmount() {
-    try {
-      paymentProcessor.processPayment(0, user, "CreditCard"); // monto inválido
-    } catch (IllegalArgumentException e) {
-      assertTrue(e.getMessage().contains("Invalid amount or user")); // verificar mensaje de error
-    }
-  } */
-
-  // usar assertThrows mejor que try-catch
-  @Test
-  public void testProcessPayment_InvalidAmount() {
-    Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-      paymentProcessor.processPayment(0, user, "CreditCard"); // monto inválido
-    });
-
-    //assertTrue(exception.getMessage().contains("Invalid amount or user")); // contiene el mensaje de error
-    
-    assertEquals("Invalid amount or user", exception.getMessage()); // exactamente
-  }
-  
-  @Test
-  public void testProcessPayment_InvalidUser() {
-    Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-      paymentProcessor.processPayment(100, null, "CreditCard"); // usuario inválido
-    });
-
-    assertTrue(exception.getMessage().contains("Invalid amount or user")); // verificar mensaje de error
-  }
-
   @Test
   public void testProcessPayment_UnknownMethod() {
     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -109,4 +101,18 @@ public class PaymentProcesorTest {
 
     assertTrue(exception.getMessage().contains("Unknown payment method")); // verificar mensaje de error
   }
+  
+  
+  @Test
+  void testProcessPayment_ShouldNotAddPaymentWhenResultIsFalse() {
+    boolean result = false;
+    // Ejecuta el método que contiene el if
+    // Verifica que paymentHistory no haya cambiado
+    given(creditCardPayment.process(100.0, user)).willReturn(result);
+    boolean paymentResult = paymentProcessor.processPayment(100, user, "CreditCard");
+    assertTrue(!paymentResult); // Verifica que el resultado sea falso
+    verify(paymentHistory, never()).add(any(Payment.class)); // Verifica que no se haya agregado un pago al PaymentHistory
+  }
+
+
 }
