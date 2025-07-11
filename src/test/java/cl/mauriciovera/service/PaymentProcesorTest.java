@@ -93,8 +93,7 @@ public class PaymentProcesorTest {
     boolean result = paymentProcessor.processPayment(200, user, "BankTransfer"); // metodo BankTransfer
     assertTrue(result); // verificar que el resultado sea verdadero
 
-    verify(bankTransferPayment).process(200.0, user); // verificar que se haya llamado al mock con los parámetros
-                                                      // correctos
+    verify(bankTransferPayment).process(200.0, user); // verificar que se haya llamado al mock con los parámetros correctos
     verify(paymentHistory).add(any(Payment.class)); // verificar solo que se haya llamado el método
   }
 
@@ -115,8 +114,10 @@ public class PaymentProcesorTest {
     given(creditCardPayment.process(100.0, user)).willReturn(result);
     boolean paymentResult = paymentProcessor.processPayment(100, user, "CreditCard");
     assertTrue(!paymentResult); // Verifica que el resultado sea falso
-    verify(paymentHistory, never()).add(any(Payment.class)); // Verifica que no se haya agregado un pago al
-                                                             // PaymentHistory
+    verify(paymentHistory, never()).add(any(Payment.class)); // Verifica que no se haya agregado un pago al PaymentHistory, 
+    // verify para indicar que el metodo del mock es llamado con parámetros específicos
+    // never para indicar que no se debe llamar al método
+    // any para indicar que no importa el argumento, cualquier Payment
   }
 
 
