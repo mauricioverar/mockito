@@ -11,12 +11,16 @@ public class PaymentProcessor {
   private final PaymentMethod bankTransferPayment;
   private final PaymentHistory paymentHistory;
 
-  public PaymentProcessor(PaymentMethod creditCardPayment, PaymentMethod bankTransferPayment,
+  // Constructor para inyectar los mocks de PaymentMethod y PaymentHistory
+  public PaymentProcessor(
+      PaymentMethod creditCardPayment,
+      PaymentMethod bankTransferPayment,
       PaymentHistory paymentHistory) {
     this.creditCardPayment = creditCardPayment;
     this.bankTransferPayment = bankTransferPayment;
     this.paymentHistory = paymentHistory;
   }
+
 
   public boolean processPayment(double amount, User user, String method) {
     // Este método es el que se prueba en los tests unitarios.
@@ -30,7 +34,7 @@ public class PaymentProcessor {
     if (amount <= 0 || user == null) {
       throw new IllegalArgumentException("Invalid amount or user");
     }
-    
+
     boolean result;
     if ("CreditCard".equalsIgnoreCase(method)) {
       result = creditCardPayment.process(amount, user); // Aquí se invoca el mock en los tests

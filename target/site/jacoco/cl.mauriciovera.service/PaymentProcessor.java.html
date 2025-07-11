@@ -11,12 +11,16 @@ public class PaymentProcessor {
   private final PaymentMethod bankTransferPayment;
   private final PaymentHistory paymentHistory;
 
-  public PaymentProcessor(PaymentMethod creditCardPayment, PaymentMethod bankTransferPayment,
-<span class="fc" id="L15">      PaymentHistory paymentHistory) {</span>
-<span class="fc" id="L16">    this.creditCardPayment = creditCardPayment;</span>
-<span class="fc" id="L17">    this.bankTransferPayment = bankTransferPayment;</span>
-<span class="fc" id="L18">    this.paymentHistory = paymentHistory;</span>
-<span class="fc" id="L19">  }</span>
+  // Constructor para inyectar los mocks de PaymentMethod y PaymentHistory
+  public PaymentProcessor(
+      PaymentMethod creditCardPayment,
+      PaymentMethod bankTransferPayment,
+<span class="fc" id="L18">      PaymentHistory paymentHistory) {</span>
+<span class="fc" id="L19">    this.creditCardPayment = creditCardPayment;</span>
+<span class="fc" id="L20">    this.bankTransferPayment = bankTransferPayment;</span>
+<span class="fc" id="L21">    this.paymentHistory = paymentHistory;</span>
+<span class="fc" id="L22">  }</span>
+
 
   public boolean processPayment(double amount, User user, String method) {
     // Este método es el que se prueba en los tests unitarios.
@@ -27,28 +31,28 @@ public class PaymentProcessor {
     // y el valor retornado depende de la configuración del mock en el test
     // (given...willReturn...).
 
-<span class="fc bfc" id="L30" title="All 4 branches covered.">    if (amount &lt;= 0 || user == null) {</span>
-<span class="fc" id="L31">      throw new IllegalArgumentException(&quot;Invalid amount or user&quot;);</span>
+<span class="fc bfc" id="L34" title="All 4 branches covered.">    if (amount &lt;= 0 || user == null) {</span>
+<span class="fc" id="L35">      throw new IllegalArgumentException(&quot;Invalid amount or user&quot;);</span>
     }
-    
+
     boolean result;
-<span class="fc bfc" id="L35" title="All 2 branches covered.">    if (&quot;CreditCard&quot;.equalsIgnoreCase(method)) {</span>
-<span class="fc" id="L36">      result = creditCardPayment.process(amount, user); // Aquí se invoca el mock en los tests</span>
-<span class="fc bfc" id="L37" title="All 2 branches covered.">    } else if (&quot;BankTransfer&quot;.equalsIgnoreCase(method)) {</span>
-<span class="fc" id="L38">      result = bankTransferPayment.process(amount, user);</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">    if (&quot;CreditCard&quot;.equalsIgnoreCase(method)) {</span>
+<span class="fc" id="L40">      result = creditCardPayment.process(amount, user); // Aquí se invoca el mock en los tests</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">    } else if (&quot;BankTransfer&quot;.equalsIgnoreCase(method)) {</span>
+<span class="fc" id="L42">      result = bankTransferPayment.process(amount, user);</span>
     } else {
-<span class="fc" id="L40">      throw new IllegalArgumentException(&quot;Unknown payment method&quot;);</span>
+<span class="fc" id="L44">      throw new IllegalArgumentException(&quot;Unknown payment method&quot;);</span>
     }
 
-<span class="fc bfc" id="L43" title="All 2 branches covered.">    if (result) {</span>
-<span class="fc" id="L44">      paymentHistory.add(new Payment(amount, user, method, LocalDateTime.now()));</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">    if (result) {</span>
+<span class="fc" id="L48">      paymentHistory.add(new Payment(amount, user, method, LocalDateTime.now()));</span>
     }
 
-<span class="fc" id="L47">    return result;</span>
+<span class="fc" id="L51">    return result;</span>
   }
 
   public PaymentHistory getPaymentHistory() { // Método para obtener el historial de pagos
-<span class="fc" id="L51">    return paymentHistory;</span>
+<span class="fc" id="L55">    return paymentHistory;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

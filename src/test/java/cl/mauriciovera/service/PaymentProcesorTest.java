@@ -47,13 +47,13 @@ public class PaymentProcesorTest {
   private User user;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     user = new User("Pedro Perez"); // us de prueba
     paymentProcessor = new PaymentProcessor(creditCardPayment, bankTransferPayment, paymentHistory);
   }
 
   @Test
-  public void testProcessPayment_InvalidAmount() {
+  void testProcessPayment_InvalidAmount() {
     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
       paymentProcessor.processPayment(0, user, "CreditCard"); // monto inválido
     });
@@ -65,7 +65,7 @@ public class PaymentProcesorTest {
   }
 
   @Test
-  public void testProcessPayment_InvalidUser() {
+  void testProcessPayment_InvalidUser() {
     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
       paymentProcessor.processPayment(100, null, "CreditCard");
     });
@@ -74,7 +74,7 @@ public class PaymentProcesorTest {
   }
 
   @Test
-  public void testProcessPayment_CreditCardSuccess() {
+  void testProcessPayment_CreditCardSuccess() {
     given(creditCardPayment.process(100.0, user)).willReturn(true); // llamar a la data simulada
     boolean result = paymentProcessor.processPayment(100, user, "CreditCard"); // metodo CreditCard
     assertTrue(result); // verificar que el resultado sea verdadero
@@ -88,7 +88,7 @@ public class PaymentProcesorTest {
   }
 
   @Test
-  public void testProcessPayment_BankTransferSuccess() {
+  void testProcessPayment_BankTransferSuccess() {
     given(bankTransferPayment.process(200.0, user)).willReturn(true); // llamar a la data simulada
     boolean result = paymentProcessor.processPayment(200, user, "BankTransfer"); // metodo BankTransfer
     assertTrue(result); // verificar que el resultado sea verdadero
@@ -99,7 +99,7 @@ public class PaymentProcesorTest {
   }
 
   @Test
-  public void testProcessPayment_UnknownMethod() {
+  void testProcessPayment_UnknownMethod() {
     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
       paymentProcessor.processPayment(100, user, "UnknownMethod"); // método desconocido
     });
@@ -121,7 +121,7 @@ public class PaymentProcesorTest {
 
 
   @Test
-  public void testGetPaymentHistory_ReturnsInjectedInstance() {
+  void testGetPaymentHistory_ReturnsInjectedInstance() {
     PaymentHistory returnedHistory = paymentProcessor.getPaymentHistory();
     assertSame(paymentHistory, returnedHistory); // Verifica que es la misma instancia
   }
