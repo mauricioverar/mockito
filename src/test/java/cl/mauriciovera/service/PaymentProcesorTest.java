@@ -39,6 +39,7 @@ public class PaymentProcesorTest {
   private PaymentHistory paymentHistory;
 
   @Captor // captor para capturar el argumento pasado al método add de PaymentHistory
+  // creará un ArgumentCaptor
   private ArgumentCaptor<Payment> paymentCaptor; // capturar el pago agregado ********
 
   @InjectMocks // PaymentProcessor es la clase que se va a probar, y se inyectan los mocks
@@ -128,3 +129,6 @@ public class PaymentProcesorTest {
     assertSame(paymentHistory, returnedHistory); // Verifica que es la misma instancia
   }
 }
+
+// mvn clean test
+// LiveServer target/site/jacoco/index.html
