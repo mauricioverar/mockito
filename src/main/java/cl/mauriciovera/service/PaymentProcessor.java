@@ -43,11 +43,11 @@ public class PaymentProcessor {
     if (result) {
       paymentHistory.add(new Payment(amount, user, method, LocalDateTime.now()));
     }
-    
+
     return result;
   }
 
-  public PaymentHistory getPaymentHistory() {
+  public PaymentHistory getPaymentHistory() { // Método para obtener el historial de pagos
     return paymentHistory;
   }
 }

@@ -1,8 +1,10 @@
 package cl.mauriciovera.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +43,7 @@ public class PaymentProcesorTest {
   @InjectMocks
   private PaymentProcessor paymentProcessor;
 
+
   private User user;
 
   @BeforeEach
@@ -64,12 +67,11 @@ public class PaymentProcesorTest {
   @Test
   public void testProcessPayment_InvalidUser() {
     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-      paymentProcessor.processPayment(100, null, "CreditCard"); // usuario inválido
+      paymentProcessor.processPayment(100, null, "CreditCard");
     });
 
-    assertTrue(exception.getMessage().contains("Invalid amount or user")); // verificar mensaje de error
+    assertTrue(exception.getMessage().contains("Invalid amount or user"));
   }
-
 
   @Test
   public void testProcessPayment_CreditCardSuccess() {
@@ -77,9 +79,11 @@ public class PaymentProcesorTest {
     boolean result = paymentProcessor.processPayment(100, user, "CreditCard"); // metodo CreditCard
     assertTrue(result); // verificar que el resultado sea verdadero
 
-    //verify(paymentHistory).add(paymentCaptor.capture()); // capturar y verificar el valor real del argumento
+    // verify(paymentHistory).add(paymentCaptor.capture()); // capturar y verificar
+    // el valor real del argumento
 
-    verify(creditCardPayment).process(100.0, user); // verificar que se haya llamado al mock con los parámetros correctos
+    verify(creditCardPayment).process(100.0, user); // verificar que se haya llamado al mock con los parámetros
+                                                    // correctos
     verify(paymentHistory).add(any(Payment.class)); // verificar solo que se haya llamado el método
   }
 
@@ -89,7 +93,8 @@ public class PaymentProcesorTest {
     boolean result = paymentProcessor.processPayment(200, user, "BankTransfer"); // metodo BankTransfer
     assertTrue(result); // verificar que el resultado sea verdadero
 
-    verify(bankTransferPayment).process(200.0, user); // verificar que se haya llamado al mock con los parámetros correctos
+    verify(bankTransferPayment).process(200.0, user); // verificar que se haya llamado al mock con los parámetros
+                                                      // correctos
     verify(paymentHistory).add(any(Payment.class)); // verificar solo que se haya llamado el método
   }
 
@@ -101,8 +106,7 @@ public class PaymentProcesorTest {
 
     assertTrue(exception.getMessage().contains("Unknown payment method")); // verificar mensaje de error
   }
-  
-  
+
   @Test
   void testProcessPayment_ShouldNotAddPaymentWhenResultIsFalse() {
     boolean result = false;
@@ -111,8 +115,14 @@ public class PaymentProcesorTest {
     given(creditCardPayment.process(100.0, user)).willReturn(result);
     boolean paymentResult = paymentProcessor.processPayment(100, user, "CreditCard");
     assertTrue(!paymentResult); // Verifica que el resultado sea falso
-    verify(paymentHistory, never()).add(any(Payment.class)); // Verifica que no se haya agregado un pago al PaymentHistory
+    verify(paymentHistory, never()).add(any(Payment.class)); // Verifica que no se haya agregado un pago al
+                                                             // PaymentHistory
   }
 
-
+  
+  @Test
+  public void testGetPaymentHistory_ReturnsInjectedInstance() {
+    PaymentHistory returnedHistory = paymentProcessor.getPaymentHistory();
+    assertSame(paymentHistory, returnedHistory); // Verifica que es la misma instancia
+  }
 }

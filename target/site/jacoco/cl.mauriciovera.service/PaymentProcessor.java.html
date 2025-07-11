@@ -43,12 +43,12 @@ public class PaymentProcessor {
 <span class="fc bfc" id="L43" title="All 2 branches covered.">    if (result) {</span>
 <span class="fc" id="L44">      paymentHistory.add(new Payment(amount, user, method, LocalDateTime.now()));</span>
     }
-    
+
 <span class="fc" id="L47">    return result;</span>
   }
 
-  public PaymentHistory getPaymentHistory() {
-<span class="nc" id="L51">    return paymentHistory;</span>
+  public PaymentHistory getPaymentHistory() { // Método para obtener el historial de pagos
+<span class="fc" id="L51">    return paymentHistory;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
