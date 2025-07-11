@@ -25,22 +25,23 @@ import cl.mauriciovera.model.Payment;
 import cl.mauriciovera.model.PaymentHistory;
 import cl.mauriciovera.model.User;
 
+// activación de Mockito
 @ExtendWith(MockitoExtension.class) // Extender con MockitoExtension para usar Mockito
 public class PaymentProcesorTest {
 
-  @Mock
+  @Mock // objeto simulado (mock) de PaymentMethod
   private PaymentMethod creditCardPayment; // no importar interface, solo el mock
 
   @Mock
   private PaymentMethod bankTransferPayment;
 
-  @Mock
+  @Mock // objeto simulado (mock) de PaymentHistory
   private PaymentHistory paymentHistory;
 
-  @Captor
+  @Captor // captor para capturar el argumento pasado al método add de PaymentHistory
   private ArgumentCaptor<Payment> paymentCaptor; // capturar el pago agregado ********
 
-  @InjectMocks
+  @InjectMocks // PaymentProcessor es la clase que se va a probar, y se inyectan los mocks
   private PaymentProcessor paymentProcessor;
 
 
