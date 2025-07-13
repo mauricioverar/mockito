@@ -6,6 +6,7 @@ public class Payment {
   private final String method;
   private final java.time.LocalDateTime date;
 
+  // Constructor para inicializar los campos de Payment
   public Payment(double amount, User user, String method, java.time.LocalDateTime date) {
     this.amount = amount;
     this.user = user;
@@ -13,6 +14,7 @@ public class Payment {
     this.date = date;
   }
 
+  // Métodos para obtener los valores de los campos
   public double getAmount() {
     return amount;
   }

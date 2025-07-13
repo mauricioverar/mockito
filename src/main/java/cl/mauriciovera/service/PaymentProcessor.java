@@ -23,20 +23,24 @@ public class PaymentProcessor {
 
 
   public boolean processPayment(double amount, User user, String method) {
-    // Este método es el que se prueba en los tests unitarios.
-    // Los tests llaman a processPayment y, según el método de pago recibido,
-    // este método delega la operación al método process del mock correspondiente.
-    // Por ejemplo, si method es "CreditCard", se llama a
-    // creditCardPayment.process(...)
-    // y el valor retornado depende de la configuración del mock en el test
-    // (given...willReturn...).
+    /*
+     Este método es el que se prueba en los tests unitarios.
+     Los tests llaman a processPayment y, según el método de pago recibido,
+     este método delega la operación al método process del mock correspondiente.
+     Por ejemplo, si method es "CreditCard", se llama a
+     creditCardPayment.process(...)
+     y el valor retornado depende de la configuración del mock en el test
+     (given...willReturn...).
+    */
 
     if (amount <= 0 || user == null) {
       throw new IllegalArgumentException("Invalid amount or user");
     }
 
     boolean result;
-    if ("CreditCard".equalsIgnoreCase(method)) {
+    // Determina el método de pago y llama al mock correspondiente
+    // Aquí se usa el método getMethodName() de PaymentMethod para determinar el método
+    if ("CreditCard".equalsIgnoreCase(method)) { // compara el método de pago
       result = creditCardPayment.process(amount, user); // Aquí se invoca el mock en los tests
     } else if ("BankTransfer".equalsIgnoreCase(method)) {
       result = bankTransferPayment.process(amount, user);

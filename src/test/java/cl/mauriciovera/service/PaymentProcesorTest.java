@@ -55,7 +55,7 @@ public class PaymentProcesorTest {
   }
 
   @Test
-  void testProcessPayment_InvalidAmount() {
+  void testProcesoDePago_MontoInvalido() {
     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
       paymentProcessor.processPayment(0, user, "CreditCard"); // monto inválido
     });
@@ -67,7 +67,7 @@ public class PaymentProcesorTest {
   }
 
   @Test
-  void testProcessPayment_InvalidUser() {
+  void testProcesoDePago_UsuarioInvalido() {
     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
       paymentProcessor.processPayment(100, null, "CreditCard");
     });
@@ -76,7 +76,7 @@ public class PaymentProcesorTest {
   }
 
   @Test
-  void testProcessPayment_CreditCardSuccess() {
+  void testProcesoDePago_TarjetaDeCredito_Exitoso() {
     given(creditCardPayment.process(100.0, user)).willReturn(true); // llamar a la data simulada
     boolean result = paymentProcessor.processPayment(100, user, "CreditCard"); // metodo CreditCard
     assertTrue(result); // verificar que el resultado sea verdadero
@@ -90,7 +90,7 @@ public class PaymentProcesorTest {
   }
 
   @Test
-  void testProcessPayment_BankTransferSuccess() {
+  void testProcesoDePago_TransferenciaBancaria_Exitoso() {
     given(bankTransferPayment.process(200.0, user)).willReturn(true); // llamar a la data simulada
     boolean result = paymentProcessor.processPayment(200, user, "BankTransfer"); // metodo BankTransfer
     assertTrue(result); // verificar que el resultado sea verdadero
@@ -100,7 +100,7 @@ public class PaymentProcesorTest {
   }
 
   @Test
-  void testProcessPayment_UnknownMethod() {
+  void testProcesoDePago_MetodoDesconocido() {
     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
       paymentProcessor.processPayment(100, user, "UnknownMethod"); // método desconocido
     });
@@ -109,7 +109,7 @@ public class PaymentProcesorTest {
   }
 
   @Test
-  void testProcessPayment_ShouldNotAddPaymentWhenResultIsFalse() {
+  void testProcesoDePago_NoDeberiaAgregarPago_CuandoElResultadoEsFalso() {
     boolean result = false;
     // Ejecuta el método que contiene el if
     // Verifica que paymentHistory no haya cambiado
@@ -124,7 +124,7 @@ public class PaymentProcesorTest {
 
 
   @Test
-  void testGetPaymentHistory_ReturnsInjectedInstance() {
+  void testObtenerHistorialDePago_RetornarInstanciaInyectada() {
     PaymentHistory returnedHistory = paymentProcessor.getPaymentHistory();
     assertSame(paymentHistory, returnedHistory); // Verifica que es la misma instancia
   }
